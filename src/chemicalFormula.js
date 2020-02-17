@@ -9,7 +9,7 @@ function isElement(str) {
 }
 
 export function isBracket(c) {
-    return c === '[' || c === '(' || c === '{';
+    return Object.keys(brackets).includes(c);
 }
 
 export function getClosingBracketIndex(str) {
