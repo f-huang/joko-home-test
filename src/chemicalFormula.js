@@ -37,11 +37,10 @@ export function getElement(str) {
     if (str.length == 1)
         element = str[0];
     else {
-        let isTwoLetters = str[1].match(/a-z/);
-        element = str.substr(0, isTwoLetters ? 2 : 1);
-        number = getNumberOfMolecules(str, isTwoLetters ? 2 : 1);
+        element = str.match(/[A-Z]{1}([a-z]{1})?/g)[0];
+        number = getNumberOfMolecules(str, element.length === 2 ? 2 : 1);
     }
-    return { [element]: number };
+    return { 'name': element, 'number': number };
 }
 
 export function getNumberOfMolecules(str, index) {
@@ -49,26 +48,42 @@ export function getNumberOfMolecules(str, index) {
     return isNaN(ret) ? 1 : ret;
 }
 
+function multiplyMolecules(molecules, multiplyBy) {
+    multiplyBy.forEach(factor => {
+        molecules.map(numberOfMolecules => numberOfMolecules * factor)
+    })
+    return molecules;
+}
+
+function addElement(ret, element) {
+    if (element.name in ret) {
+        ret[element.name] += element.number;
+    }
+    else
+        ret[element.name] = element.number;
+    return ret;
+}
 
 function parseElement(input, multiplyBy = []) {
     var ret = {};
     var i = 0;
     var indexBracket = 0;
 
-    // while (input[i]) {
-    //     if (isBracket(input[i])) {
-    //         indexBracket = getClosingBracketIndex(input) + i;
-    //         numberOfMolecules = getNumberOfMolecules(input, indexBracket + 1);
-    //         ret = parseElement(input.substr(i, indexBracket - i), [...multiplyBy, numberOfMolecules]);
-    //         i = indexBracket;
-    //     }
-    //     else if (isElement(input[i])) {
-    //         element = input.substr(i, input[i + 1].match(/[a-z]/) ? 1 : 2);
-    //         console.log(element);
-
-    //     }
-    //     i++;
-    // }
+    while (input[i]) {
+        if (isBracket(input[i])) {
+            indexBracket = getClosingBracketIndex(input) + i;
+            numberOfMolecules = getNumberOfMolecules(input, indexBracket + 1);
+            molecules = parseElement(input.substr(i, indexBracket - i), [...multiplyBy, numberOfMolecules]);
+            ret = multiplyMolecules(molecules, multiplyBy)
+            i = indexBracket;
+        }
+        else if (isElement(input[i])) {
+            var element = getElement(input.substr(i));
+            console.log(element);
+            ret = addElement(ret, element);
+        }
+        i++;
+    }
     return ret
 }
 
@@ -85,10 +100,6 @@ export function parseChemicalFormula(input) {
         return null;
 
     // isFormulaValid()
-    ret = {};
-
-    console.log(parseElement(input));
-
-    return null;
-    
+    let ret = parseElement(input);
+    return ret;
 }

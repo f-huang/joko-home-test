@@ -39,16 +39,16 @@ describe("Get number given a string index", () => {
 
 describe("Get Element in a string", () => {
     test("Simple", () => {
-        expect(getElement("H2O")).toEqual({H: 2});
+        expect(getElement("H2O")).toEqual({name: 'H', number: 2});
     })
     test("Simple", () => {
-        expect(getElement("O")).toEqual({O: 1});
+        expect(getElement("O")).toEqual({name: 'O', number: 1});
     })
     test("Two digits elements", () => {
-        expect(getElement("O12")).toEqual({O: 12});
+        expect(getElement("Mg12")).toEqual({name: 'Mg', number: 12});
     })
     test("Tricky", () => {
-        expect(getElement("HO")).toEqual({H: 1});
+        expect(getElement("HO")).toEqual({name: 'H', number: 1});
     })
 });
 
@@ -60,7 +60,15 @@ describe("Parse a Chemical Formula function", () => {
             expect(parseChemicalFormula(input)).toEqual(null);
         })
     })
+
     test("H20", () => {
-        expect(parseChemicalFormula("H2O").toEqual({H: 2, O: 1}));
+        expect(parseChemicalFormula("H2O")).toEqual({H: 2, O: 1});
     })
+
+    test("Mg", () => {
+        expect(parseChemicalFormula("Mg")).toEqual({Mg: 1});
+    })
+    // test("Mg(O)2", () => {
+    //     expect(parseChemicalFormula("Mg(O)2")).toEqual({Mg: 1, O: 2});
+    // })
 })
