@@ -34,7 +34,7 @@ export function getClosingBracketIndex(str) {
 export function getElement(str) {
     var number = 1;
     var element = '';
-    if (str.length == 1)
+    if (str.length === 1)
         element = str[0];
     else {
         element = str.match(/[A-Z]{1}([a-z]{1})?/g)[0];
