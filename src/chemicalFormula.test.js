@@ -44,16 +44,16 @@ describe("Get number given a string index", () => {
 
 describe("Get Element in a string", () => {
     test("Simple", () => {
-        expect(getElement("H2O")).toEqual({name: 'H', number: 2});
+        expect(getElement("H2O")).toEqual({H: 2});
     })
     test("Simple", () => {
-        expect(getElement("O")).toEqual({name: 'O', number: 1});
+        expect(getElement("O")).toEqual({O: 1});
     })
     test("Two digits elements", () => {
-        expect(getElement("Mg12")).toEqual({name: 'Mg', number: 12});
+        expect(getElement("Mg12")).toEqual({Mg: 12});
     })
     test("Tricky", () => {
-        expect(getElement("HO")).toEqual({name: 'H', number: 1});
+        expect(getElement("HO")).toEqual({H: 1});
     })
 });
 
@@ -81,5 +81,9 @@ describe("Parse a Chemical Formula function", () => {
     })
     test("Fe(NO3)2", () => {
         expect(parseChemicalFormula("Fe(NO3)2")).toEqual({Fe: 1, N: 2, O: 6});
+    })
+
+    test("K4[ON(SO3)2]2", () => {
+        expect(parseChemicalFormula("K4[ON(SO3)2]2")).toEqual({K: 4, O: 14, N:2, S: 4});
     })
 })

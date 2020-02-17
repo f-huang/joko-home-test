@@ -40,7 +40,7 @@ export function getElement(str) {
         element = str.match(/[A-Z]{1}([a-z]{1})?/g)[0];
         number = getNumberOfMolecules(str, element.length === 2 ? 2 : 1);
     }
-    return { 'name': element, 'number': number };
+    return { [element]: number };
 }
 
 export function getNumberOfMolecules(str, index) {
@@ -51,7 +51,6 @@ export function getNumberOfMolecules(str, index) {
 function multiplyMolecules(molecules, multiplyBy) {
     if (molecules === {} || multiplyBy === [])
         return molecules;
-    // console.log("mult", molecules, multiplyBy)
     multiplyBy.forEach(factor => {
         for (let [key, value] of Object.entries(molecules)) {
             molecules[key] = value * factor;
@@ -60,44 +59,38 @@ function multiplyMolecules(molecules, multiplyBy) {
     return molecules;
 }
 
-function addElement(ret, element, multiplyBy = []) {
-    multiplyBy.forEach(factor => {
-        element.number *= factor
-    })
-    if (element.name in ret) {
-        ret[element.name] += element.number;
-    }
-    else
-        ret[element.name] = element.number;
-    return ret;
+function mergeElements(oldElements, newElements, multiplyBy = []) {
+    newElements = multiplyMolecules(newElements, multiplyBy);
+    let ret = {};
+    Object.keys(oldElements).forEach(key => {
+        if (newElements.hasOwnProperty(key)) {
+            ret[key] = oldElements[key] + newElements[key]
+            delete oldElements[key];
+            delete newElements[key];
+        }
+      })
+    return {...ret, ...oldElements, ...newElements};
 }
 
 function parseElement(input, multiplyBy = []) {
     var ret = {};
     var i = 0;
-    var indexBracket = 0;
-    // console.log("input", input, multiplyBy);
     while (input[i]) {
         if (isBracket(input[i])) {
-            indexBracket = getClosingBracketIndex(input.substr(i)) + i;
-            var numberOfMolecules = getNumberOfMolecules(input, indexBracket + 1);
-            // console.log(i, indexBracket, numberOfMolecules);
-            var molecules = parseElement(input.substr(i + 1, indexBracket - i), [...multiplyBy, numberOfMolecules]);
-            // console.log("molecules", molecules, "Ret", ret);
-            ret = {...ret, ...molecules}
-            // console.log(ret)
+            let indexBracket = getClosingBracketIndex(input.substr(i)) + i;
+            let numberOfMolecules = getNumberOfMolecules(input, indexBracket + 1);
+            let molecules = parseElement(input.substr(i + 1, indexBracket - i), [...multiplyBy, numberOfMolecules]);
+            ret = mergeElements(ret, molecules);
             i = indexBracket + 1;
         }
         else if (isElement(input[i])) {
             var element = getElement(input.substr(i));
-            ret = addElement(ret, element, multiplyBy);
-            // console.log("single element", ret);
+            ret = mergeElements(ret, element, multiplyBy);
         }
         i++;
     }
     return ret
 }
-
 
 
 /**
