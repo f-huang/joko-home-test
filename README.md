@@ -1,7 +1,21 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Small technical home test
+  Subject here: https://gist.github.com/ahollocou/1d33116d172b9356aafb42847cc870ee
+
+🧪Parsing a chemical formula and display the number of atoms in this formula.
+
+⚠️ The formula should be correctly formatted: 
+- There are as many opening brackets than closing brackets.
+- Those brackets must be correctly ordered.
+- Accepted brackets are : `[, (, {`.
+- An element should be maximum two letters, thus, the second letter should be lowercased.
+
+
+
+
+
 
 ## Available Scripts
-
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 In the project directory, you can run:
 
 ### `yarn start`
