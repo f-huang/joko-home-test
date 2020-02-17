@@ -1,0 +1,10 @@
+.Results {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+}
+
+.Results-item {
+    padding: 2vmin;
+    color: black;
+}

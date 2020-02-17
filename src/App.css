@@ -3,7 +3,7 @@
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 15vmin;
   pointer-events: none;
 }
 
@@ -14,19 +14,48 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #ffffff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.App-input {
+  width: 40vmin;
+  padding: 12px 24px;
+  background-color: #ffffff;
 }
+
+.App-button {
+  background-color: #62DAFB;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 12px 8vmin;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.App-error {
+  width: 100%;
+  color: red;
+  font-size: 0.4em;
+  font-style: italic;
+  padding: 0;
+  margin: 0;
+}
+
+.App-results {
+  min-height: 44vh;
+  width: 100%;
+}
+
 
 @keyframes App-logo-spin {
   from {
