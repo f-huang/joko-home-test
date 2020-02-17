@@ -7,9 +7,14 @@ describe("Get the index of the closing bracket", () => {
     });
     
     test("Nested test", () => {
-        const input = "( [ 2 ])"
+        const input = "(H[Fe2])"
         expect(getClosingBracketIndex(input)).toEqual(7);
         expect(getClosingBracketIndex(input.substr(2))).toEqual(6 - 2);
+    });
+
+    test("Real formula", () => {
+        const input = "Mg(OH)2"
+        expect(getClosingBracketIndex(input.substr(2))).toEqual(5 - 2);
     });
 
     test("Nested with same brackets", () => {
@@ -65,10 +70,16 @@ describe("Parse a Chemical Formula function", () => {
         expect(parseChemicalFormula("H2O")).toEqual({H: 2, O: 1});
     })
 
-    test("Mg", () => {
+    test("(Mg)", () => {
         expect(parseChemicalFormula("Mg")).toEqual({Mg: 1});
     })
-    // test("Mg(O)2", () => {
-    //     expect(parseChemicalFormula("Mg(O)2")).toEqual({Mg: 1, O: 2});
-    // })
+    test("Mg(O)2", () => {
+        expect(parseChemicalFormula("Mg(O)2")).toEqual({Mg: 1, O: 2});
+    })
+    test("Mg(OH)2", () => {
+        expect(parseChemicalFormula("Mg(OH)2")).toEqual({Mg: 1, O: 2, H: 2});
+    })
+    test("Fe(NO3)2", () => {
+        expect(parseChemicalFormula("Fe(NO3)2")).toEqual({Fe: 1, N: 2, O: 6});
+    })
 })

@@ -49,13 +49,21 @@ export function getNumberOfMolecules(str, index) {
 }
 
 function multiplyMolecules(molecules, multiplyBy) {
+    if (molecules === {} || multiplyBy === [])
+        return molecules;
+    // console.log("mult", molecules, multiplyBy)
     multiplyBy.forEach(factor => {
-        molecules.map(numberOfMolecules => numberOfMolecules * factor)
+        for (let [key, value] of Object.entries(molecules)) {
+            molecules[key] = value * factor;
+        }
     })
     return molecules;
 }
 
-function addElement(ret, element) {
+function addElement(ret, element, multiplyBy = []) {
+    multiplyBy.forEach(factor => {
+        element.number *= factor
+    })
     if (element.name in ret) {
         ret[element.name] += element.number;
     }
@@ -68,19 +76,22 @@ function parseElement(input, multiplyBy = []) {
     var ret = {};
     var i = 0;
     var indexBracket = 0;
-
+    // console.log("input", input, multiplyBy);
     while (input[i]) {
         if (isBracket(input[i])) {
-            indexBracket = getClosingBracketIndex(input) + i;
-            numberOfMolecules = getNumberOfMolecules(input, indexBracket + 1);
-            molecules = parseElement(input.substr(i, indexBracket - i), [...multiplyBy, numberOfMolecules]);
-            ret = multiplyMolecules(molecules, multiplyBy)
-            i = indexBracket;
+            indexBracket = getClosingBracketIndex(input.substr(i)) + i;
+            var numberOfMolecules = getNumberOfMolecules(input, indexBracket + 1);
+            // console.log(i, indexBracket, numberOfMolecules);
+            var molecules = parseElement(input.substr(i + 1, indexBracket - i), [...multiplyBy, numberOfMolecules]);
+            // console.log("molecules", molecules, "Ret", ret);
+            ret = {...ret, ...molecules}
+            // console.log(ret)
+            i = indexBracket + 1;
         }
         else if (isElement(input[i])) {
             var element = getElement(input.substr(i));
-            console.log(element);
-            ret = addElement(ret, element);
+            ret = addElement(ret, element, multiplyBy);
+            // console.log("single element", ret);
         }
         i++;
     }
